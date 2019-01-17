@@ -15,6 +15,6 @@ Passin is used on the command line with the following commands:
 
 ```console
 $ passin start
-$ passin get 'service_name' 'master_password'
+$ passin get 'service_name'
 $ passin reset
 ```
