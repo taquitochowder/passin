@@ -27,7 +27,7 @@ def get_hexdigest(salt, password):
     return hashlib.sha256((salt + password).encode('utf-8')).hexdigest()
 
 def gen_password(plaintext, service):
-    """Generates a password using the service name and master password.
+    """Generates a password in hex using the service name and master password.
     
     Arguments:
         plaintext {str} -- The master password.
@@ -40,5 +40,33 @@ def gen_password(plaintext, service):
     secret_key = os.environ['PASSINKEY']
     salt = get_hexdigest(secret_key, service)
     hsh = get_hexdigest(salt, plaintext)
-    return ''.join(salt + hsh)
+    return salt + hsh
 
+def password(plaintext, service, length=LENGTH, alphabet=ALPHABET):
+    """Creates a usable password based on certain parameters.
+    
+    Arguments:
+        plaintext {str} -- The master password.
+        service {str} -- The service name.
+    
+    Keyword Arguments:
+        length {int} -- The length of the password. (default: {LENGTH})
+        alphabet {str} -- The letters that the password can be made of. (default: {ALPHABET})
+    
+    Returns:
+        [str] -- The password corresponding to the service.
+    """
+
+
+    # 16 is needed is specify that it is hex
+    num = int(gen_password(plaintext, service), 16)
+
+    # Used as the base that num will be converted to, base-74 by default
+    num_chars = len(alphabet)
+
+    chars = []
+    while len(chars) < length:
+        num, rem = divmod(num, num_chars)
+        chars.append(alphabet[rem])
+
+    return ''.join(chars)
