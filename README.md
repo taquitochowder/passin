@@ -18,3 +18,8 @@ passin setup
 passin get 'service_name'
 passin reset
 ```
+
+## Current Problems
+
+- Environment variables don't work how the program wants them to work, config files might be better for storing secret key and possibly a hash of the master password
+- More of an issue with this kind of password manager, there's no syncing with other computers, but one solution that is already sorta setup is to allow users to enter a secret key. This will require allowing the key to be exported, which can become a major security risk.
