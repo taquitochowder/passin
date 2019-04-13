@@ -19,9 +19,9 @@ def setup(use_existing):
     be provided.
     """
     if functions.key_exists():
-        click.echo(
+        click.secho(
             'It looks like already have a secret key. Running this command will RESET it!',
-            color='red')
+            fg='red')
         click.confirm('Do you want to continue?', abort=True)
 
     if use_existing:
@@ -49,7 +49,7 @@ def get(service):
 
 @main.command('reset', short_help='reset all passwords')
 def reset():
-    click.echo('This will permanently remove your secret key!', color='red')
+    click.secho('This will permanently remove your secret key!', fg='red')
     click.confirm('Do you want to continue?', abort=True)
 
     functions.reset_key()
