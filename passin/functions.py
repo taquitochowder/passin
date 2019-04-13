@@ -1,15 +1,33 @@
 import hashlib
-import os
 import secrets
+import configparser
 
 LENGTH = 8
 ALPHABET = ('abcdefghijklmnopqrstuvwxyz'
             'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
             '0123456789!@#$%^&*()-_')
 
+config = configparser.ConfigParser()
+config.read('config.ini')
+
+
+def reset_key():
+    ''' Resets the secret key in the config file.
+    '''
+    config['SECRET']['key'] = ''
+
+    with open('config.ini', 'w') as configfile:
+        config.write(configfile)
+
 
 def key_exists():
-    return 'PASSINKEY' in os.environ
+    '''Checks if the secret key is set in the config file.
+
+    Returns:
+        [str] -- The secret key if it exists, a falsy value otherwise.
+    '''
+
+    return config['SECRET']['key']
 
 
 def gen_secretkey():
@@ -27,7 +45,10 @@ def set_secretkey(key):
         key {str} -- The secret key.
     """
 
-    os.environ['PASSINKEY'] = key
+    config['SECRET']['key'] = key
+
+    with open('config.ini', 'w') as configfile:
+        config.write(configfile)
 
 
 def get_hexdigest(salt, password):
@@ -55,7 +76,7 @@ def gen_password(plaintext, service):
         [str] -- A generated password.
     """
 
-    secret_key = os.environ['PASSINKEY']
+    secret_key = config['SECRET']['key']
     salt = get_hexdigest(secret_key, service)
     hsh = get_hexdigest(salt, plaintext)
     return salt + hsh
