@@ -1,6 +1,7 @@
 import hashlib
 import secrets
 import configparser
+import pkg_resources
 
 LENGTH = 8
 ALPHABET = ('abcdefghijklmnopqrstuvwxyz'
@@ -8,7 +9,8 @@ ALPHABET = ('abcdefghijklmnopqrstuvwxyz'
             '0123456789!@#$%^&*()-_')
 
 config = configparser.ConfigParser()
-config.read('config.ini')
+config_path = pkg_resources.resource_filename('passin', 'config.ini')
+config.read(config_path)
 
 
 def reset_key():
@@ -16,7 +18,7 @@ def reset_key():
     '''
     config['SECRET']['key'] = ''
 
-    with open('config.ini', 'w') as configfile:
+    with open(config_path, 'w') as configfile:
         config.write(configfile)
 
 
@@ -27,7 +29,7 @@ def key_exists():
         [str] -- The secret key if it exists, a falsy value otherwise.
     '''
 
-    return config['SECRET']['key']
+    return config['SECRET']['key'] is not ''
 
 
 def gen_secretkey():
@@ -47,7 +49,7 @@ def set_secretkey(key):
 
     config['SECRET']['key'] = key
 
-    with open('config.ini', 'w') as configfile:
+    with open(config_path, 'w') as configfile:
         config.write(configfile)
 
 
