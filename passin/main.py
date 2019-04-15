@@ -36,19 +36,29 @@ def setup(use_existing):
         click.echo('Secret key set!')
 
 
-@main.command('get', short_help='get password for service')
+@main.command('get', short_help='get password for servcice')
 @click.argument('service', metavar='<service>')
-def get(service):
+@click.option('--length', default=8, help='length of password (default: 8)')
+def get(service, length):
+    """Generates a password for a given service. Correct master password is
+    required to generate the intended password, and will not be verified.
+    """
+
     master = click.prompt(
         'Enter your master password',
         hide_input=True,
         confirmation_prompt=True)
     click.echo(
-        f'Password for {service}: {functions.password(master, service)}')
+        f'Password for {service}: {functions.password(master, service, length)}')
 
 
 @main.command('reset', short_help='reset all passwords')
 def reset():
+    """Resets the secret key set in the config file. This is an irreversible action
+    and it's recommended to save the secret key elsewhere if the passwords are
+    to be saved.
+    """
+
     click.secho('This will permanently remove your secret key!', fg='red')
     click.confirm('Do you want to continue?', abort=True)
 

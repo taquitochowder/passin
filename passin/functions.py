@@ -3,7 +3,6 @@ import secrets
 import configparser
 import pkg_resources
 
-LENGTH = 8
 ALPHABET = ('abcdefghijklmnopqrstuvwxyz'
             'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
             '0123456789!@#$%^&*()-_')
@@ -84,7 +83,7 @@ def gen_password(plaintext, service):
     return salt + hsh
 
 
-def password(plaintext, service, length=LENGTH, alphabet=ALPHABET):
+def password(plaintext, service, length=8, alphabet=ALPHABET):
     """Creates a usable password based on certain parameters.
 
     Arguments:
